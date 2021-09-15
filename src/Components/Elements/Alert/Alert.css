@@ -1,0 +1,51 @@
+.alert-wrapeer {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.alert-card-container {
+  padding: 20px;
+  width: 400px;
+  border-radius: 8px;
+  background: #ffffff;
+}
+.card-content {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+.card-btns {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0 15px;
+}
+.alert-button.delete {
+  margin-right: 20px;
+}
+.alert-message {
+  text-align: center;
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+.alert-form-input {
+  outline: none;
+  border: none;
+  font-size: 24px;
+  border-bottom: 1px solid grey;
+}
+.alert-form-input.email {
+  margin: 20px 0;
+}
+.alert-form-input.content {
+  resize: none;
+  height: 100px;
+}

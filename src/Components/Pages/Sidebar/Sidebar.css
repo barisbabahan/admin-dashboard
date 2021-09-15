@@ -1,0 +1,14 @@
+:root {
+  --sidebar-bg: #253152;
+  --text-color: #fefefe;
+}
+.sidebar-root-container {
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  height: 100%;
+  width: 300px;
+  background: var(--sidebar-bg);
+  color: var(--text-color);
+  overflow: scroll;
+}
