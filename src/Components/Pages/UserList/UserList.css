@@ -9,14 +9,31 @@
   background: rgb(214, 213, 213);
   cursor: pointer;
 }
+.delete-icon {
+  margin-right: 20px;
+}
 .table-control-buttons-container {
+  margin-top: 15px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
 }
-.pagination-arrow {
+.add-user-btn-container {
+  margin-left: 20px;
+}
+.add-btn {
+  width: 64px !important;
+  border-radius: 50% !important;
+  font-size: 24px !important;
+}
+.pagination-control-btns {
+  display: flex;
+  align-items: center;
+}
+.pagination-arrows {
   font-size: 48px;
   margin-left: 40px;
+  color: #3f51b5;
 }
 .prev-arrow,
 .next-arrow {

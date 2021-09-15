@@ -7,6 +7,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { FormControl, Select } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import Alert from "../../Elements/Alert/Alert";
 import "./UserList.css";
 
@@ -50,6 +53,27 @@ const UserList = () => {
     }
   };
 
+  const deleteRow = () => {
+    setUsers((prevVal) => {
+      return prevVal.filter((user) => user.id !== alert.rowId);
+    });
+    setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
+  };
+
+  const updateUser = (updatedUser) => {
+    setUsers((prevVal) =>
+      prevVal.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+    );
+    setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
+  };
+
+  const addUser = (newUser) => {
+    setUsers((prevVal) => {
+      return [...prevVal, newUser];
+    });
+    setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
+  };
+
   return (
     <>
       <div className="user-list-table-container active-page">
@@ -63,7 +87,6 @@ const UserList = () => {
                     <TableCell align="left">Name</TableCell>
                     <TableCell align="left">Email</TableCell>
                     <TableCell align="left">content</TableCell>
-                    <TableCell align="left">Delete / Edit</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -84,6 +107,7 @@ const UserList = () => {
                           </TableCell>
                           <TableCell align="left">
                             <span
+                              className="delete-icon"
                               onClick={() =>
                                 setAlert({
                                   show: true,
@@ -92,9 +116,8 @@ const UserList = () => {
                                 })
                               }
                             >
-                              Delete
-                            </span>{" "}
-                            /{" "}
+                              <DeleteIcon />
+                            </span>
                             <span
                               onClick={() =>
                                 setAlert({
@@ -104,7 +127,7 @@ const UserList = () => {
                                 })
                               }
                             >
-                              Edit
+                              <EditIcon />
                             </span>
                           </TableCell>
                         </TableRow>
@@ -114,44 +137,63 @@ const UserList = () => {
               </Table>
             </TableContainer>
             <div className="table-control-buttons-container">
-              <FormControl>
-                <Select
-                  native
-                  value={tableDisplayLimit.increasement}
-                  onChange={(e) => {
-                    setTableDisplayLimit((prevVal) => {
-                      return {
-                        ...prevVal,
-                        increasement: parseInt(e.target.value),
-                      };
+              <div className="add-user-btn-container">
+                <Button
+                  onClick={() => {
+                    setAlert({
+                      rowId: users.length + 1,
+                      show: true,
+                      mode: "add",
                     });
                   }}
+                  className="add-btn"
+                  variant="contained"
+                  color="primary"
                 >
-                  <option value={10}>Ten</option>
-                  <option value={20}>Twenty</option>
-                  <option value={50}>Fifty</option>
-                </Select>
-              </FormControl>
-              <div className="pagination-arrow">
-                <span
-                  onClick={() => handleTableBtns("prev")}
-                  style={{
-                    color: tableDisplayLimit.start === 0 && "grey",
-                  }}
-                  className="prev-arrow"
-                >
-                  &lt;
-                </span>
-                <span
-                  style={{
-                    color:
-                      tableDisplayLimit.finish + 1 > users.length && "grey",
-                  }}
-                  onClick={() => handleTableBtns("next")}
-                  className="next-arrow"
-                >
-                  &gt;
-                </span>
+                  +
+                </Button>
+              </div>
+              <div className="pagination-control-btns">
+                <FormControl>
+                  <Select
+                    native
+                    value={tableDisplayLimit.increasement}
+                    onChange={(e) => {
+                      setTableDisplayLimit((prevVal) => {
+                        return {
+                          ...prevVal,
+                          increasement: parseInt(e.target.value),
+                        };
+                      });
+                    }}
+                  >
+                    <option value={10}>Ten</option>
+                    <option value={20}>Twenty</option>
+                    <option value={50}>Fifty</option>
+                    <option value={100}>Hundred</option>
+                  </Select>
+                </FormControl>
+                <div className="pagination-arrows">
+                  <span
+                    onClick={() => handleTableBtns("prev")}
+                    style={{
+                      color: tableDisplayLimit.start === 0 && "grey",
+                    }}
+                    className="prev-arrow"
+                  >
+                    &lt;
+                  </span>
+                  <span
+                    style={{
+                      color:
+                        tableDisplayLimit.finish + 1 > users.length && "grey",
+                    }}
+                    onClick={() => handleTableBtns("next")}
+                    className="next-arrow"
+                  >
+                    &gt;
+                  </span>
+                </div>
               </div>
             </div>
           </>
@@ -161,23 +203,15 @@ const UserList = () => {
       </div>
       {alert.show && (
         <Alert
-          user={users.find((user) => user.id === alert.rowId)}
+          user={
+            alert.mode !== "add" &&
+            users.find((user) => user.id === alert.rowId)
+          }
           alert={alert}
           setAlert={setAlert}
-          deleteRow={() => {
-            setUsers((prevVal) => {
-              return prevVal.filter((user) => user.id !== alert.rowId);
-            });
-            setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
-          }}
-          updateUser={(updatedUser) => {
-            setUsers((prevVal) =>
-              prevVal.map((user) =>
-                user.id === updatedUser.id ? updatedUser : user
-              )
-            );
-            setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
-          }}
+          deleteRow={() => deleteRow()}
+          updateUser={(updatedUser) => updateUser(updatedUser)}
+          addUser={(newUser) => addUser(newUser)}
         />
       )}
     </>

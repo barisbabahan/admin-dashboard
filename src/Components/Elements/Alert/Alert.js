@@ -6,30 +6,69 @@ import DoneIcon from "@material-ui/icons/Done";
 import Alert from "@material-ui/lab/Alert";
 
 import "./Alert.css";
-const AlertModal = ({ alert, setAlert, deleteRow, user, updateUser }) => {
+const AlertModal = ({
+  alert,
+  setAlert,
+  deleteRow,
+  user,
+  updateUser,
+  addUser,
+}) => {
   const [alertDetai, setAlertDetai] = useState({
     message: "",
     type: "",
   });
-  const [tempUser, setTempUser] = useState(user);
+
+  const [tempUser, setTempUser] = useState(
+    user || {
+      id: Math.floor(Math.random() * (100000 - alert.rowId + 1) + alert.rowId),
+      name: "",
+      email: "",
+      body: "",
+    }
+  );
 
   const handleActionBtn = () => {
-    if (alert.mode === "delete") {
-      deleteRow();
-      setAlertDetai({ message: `Row ${alert.rowId} deleted`, type: "success" });
-    } else {
-      if (JSON.stringify(tempUser) === JSON.stringify(user)) {
+    switch (alert.mode) {
+      case "delete":
+        deleteRow();
         setAlertDetai({
-          message: "You need to change value to update table!",
-          type: "error",
-        });
-      } else {
-        updateUser(tempUser);
-        setAlertDetai({
-          message: "user updated successfully",
+          message: `Row ${alert.rowId} deleted`,
           type: "success",
         });
-      }
+        break;
+      case "edit":
+        if (JSON.stringify(tempUser) === JSON.stringify(user)) {
+          setAlertDetai({
+            message: "You need to change value to update table!",
+            type: "error",
+          });
+        } else if (tempUser.name && tempUser.body && tempUser.email) {
+          updateUser(tempUser);
+          setAlertDetai({
+            message: "user updated successfully",
+            type: "success",
+          });
+        }
+        break;
+      case "add":
+        if (tempUser.name && tempUser.email && tempUser.body) {
+          addUser(tempUser);
+          setAlertDetai({
+            message: "user added successfully",
+            type: "success",
+          });
+        } else {
+          setAlertDetai({
+            message: "You need to fill all inputs!",
+            type: "error",
+          });
+        }
+        break;
+      default:
+        break;
+    }
+    if (alert.mode === "delete") {
     }
   };
 
@@ -50,7 +89,7 @@ const AlertModal = ({ alert, setAlert, deleteRow, user, updateUser }) => {
         <input
           className="alert-form-input email"
           type="text"
-          value={tempUser.email}
+          value={tempUser.email || ""}
           placeholder="Enter email"
           onChange={(e) =>
             setTempUser((prevVal) => {
@@ -61,7 +100,7 @@ const AlertModal = ({ alert, setAlert, deleteRow, user, updateUser }) => {
         <textarea
           className="alert-form-input content"
           type="text"
-          value={tempUser.body}
+          value={tempUser.body || ""}
           placeholder="Enter content"
           onChange={(e) =>
             setTempUser((prevVal) => {
@@ -81,7 +120,7 @@ const AlertModal = ({ alert, setAlert, deleteRow, user, updateUser }) => {
             ? `Do you want to delete row ${alert.rowId} ?`
             : `Enter new values for row ${alert.rowId} `}
         </p>
-        {alert.mode === "edit" && renderEditForm()}
+        {(alert.mode === "edit" || alert.mode === "add") && renderEditForm()}
         <div className="card-btns">
           <Button
             variant="contained"
@@ -92,7 +131,11 @@ const AlertModal = ({ alert, setAlert, deleteRow, user, updateUser }) => {
             startIcon={alert.mode === "delete" ? <DeleteIcon /> : <DoneIcon />}
             onClick={() => handleActionBtn()}
           >
-            {alert.mode === "delete" ? "Delete" : "Update"}
+            {alert.mode === "delete"
+              ? "Delete"
+              : alert.mode === "update"
+              ? "Update"
+              : "Add"}
           </Button>
           <Button
             variant="contained"
