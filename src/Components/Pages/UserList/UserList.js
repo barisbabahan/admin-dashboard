@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addUser, updateUser, deleteUser } from "../../../actions/userList";
+import { getUsers } from "../../../reducers/userList";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -33,6 +34,10 @@ const UserList = () => {
     mode: "",
   });
 
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
+
   const tableFunctionalites = [
     "You can add user by clicking +",
     "You can edit user by clicking pen button",
@@ -58,6 +63,24 @@ const UserList = () => {
         };
       });
     }
+  };
+
+  const closeAlert = () =>
+    setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
+
+  const deleteRow = () => {
+    dispatch(deleteUser(alert.rowId));
+    closeAlert();
+  };
+
+  const handleUpdateUser = (updatedUser) => {
+    dispatch(updateUser(updatedUser));
+    closeAlert();
+  };
+
+  const addNewUser = (newUser) => {
+    dispatch(addUser(newUser));
+    closeAlert();
   };
 
   const renderPaginationBtns = () => {
@@ -104,24 +127,6 @@ const UserList = () => {
         </div>
       </div>
     );
-  };
-
-  const closeAlert = () =>
-    setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
-
-  const deleteRow = () => {
-    dispatch(deleteUser(alert.rowId));
-    closeAlert();
-  };
-
-  const handleUpdateUser = (updatedUser) => {
-    dispatch(updateUser(updatedUser));
-    closeAlert();
-  };
-
-  const addNewUser = (newUser) => {
-    dispatch(addUser(newUser));
-    closeAlert();
   };
 
   return (

@@ -53,12 +53,12 @@
 }
 .pagination-arrows {
   font-size: 48px;
-  margin-left: 40px;
+  margin-left: 10px;
   color: #3f51b5;
 }
 .prev-arrow,
 .next-arrow {
-  margin-right: 20px;
+  margin-right: 10px;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;

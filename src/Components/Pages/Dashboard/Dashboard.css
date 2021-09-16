@@ -60,3 +60,17 @@
   gap: 20px;
   width: 100%;
 }
+
+@media only screen and (max-width: 960px) {
+  .information-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  .upgrade-section {
+    width: 60%;
+  }
+  .credit-cards-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
