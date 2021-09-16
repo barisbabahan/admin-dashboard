@@ -27,7 +27,6 @@ const AlertModal = ({
       body: "",
     }
   );
-
   const handleActionBtn = () => {
     switch (alert.mode) {
       case "delete":
@@ -43,7 +42,12 @@ const AlertModal = ({
             message: "You need to change value to update table!",
             type: "error",
           });
-        } else if (tempUser.name && tempUser.body && tempUser.email) {
+        } else if (
+          tempUser.id &&
+          tempUser.name &&
+          tempUser.body &&
+          tempUser.email
+        ) {
           updateUser(tempUser);
           setAlertDetai({
             message: "user updated successfully",
@@ -52,7 +56,7 @@ const AlertModal = ({
         }
         break;
       case "add":
-        if (tempUser.name && tempUser.email && tempUser.body) {
+        if (tempUser.id && tempUser.name && tempUser.email && tempUser.body) {
           addUser(tempUser);
           setAlertDetai({
             message: "user added successfully",
@@ -118,7 +122,9 @@ const AlertModal = ({
         <p className="card-content">
           {alert.mode === "delete"
             ? `Do you want to delete row ${alert.rowId} ?`
-            : `Enter new values for row ${alert.rowId} `}
+            : `Enter new values ${
+                alert.mode === "add" ? "" : `for row ${alert.rowId}`
+              } `}
         </p>
         {(alert.mode === "edit" || alert.mode === "add") && renderEditForm()}
         <div className="card-btns">
@@ -133,7 +139,7 @@ const AlertModal = ({
           >
             {alert.mode === "delete"
               ? "Delete"
-              : alert.mode === "update"
+              : alert.mode === "edit"
               ? "Update"
               : "Add"}
           </Button>

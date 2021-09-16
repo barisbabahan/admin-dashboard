@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addUser, updateUser, deleteUser } from "../../../actions/userList";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -14,26 +17,20 @@ import Alert from "../../Elements/Alert/Alert";
 import "./UserList.css";
 
 const UserList = () => {
+  const dispatch = useDispatch();
+  const { users, loading } = useSelector((state) => state);
+
   const [tableDisplayLimit, setTableDisplayLimit] = useState({
     start: 0,
     finish: 10,
     increasement: 10,
   });
-  const [users, setUsers] = useState(null);
+
   const [alert, setAlert] = useState({
     rowId: null,
     show: false,
     mode: "",
   });
-
-  useEffect(() => {
-    const getUsers = async () => {
-      await fetch(process.env.REACT_APP_API_URL)
-        .then((res) => res.json())
-        .then((data) => setUsers(data));
-    };
-    getUsers();
-  }, []);
 
   const handleTableBtns = (action) => {
     const { start, finish, increasement } = tableDisplayLimit;
@@ -53,31 +50,74 @@ const UserList = () => {
     }
   };
 
-  const deleteRow = () => {
-    setUsers((prevVal) => {
-      return prevVal.filter((user) => user.id !== alert.rowId);
-    });
-    setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
-  };
-
-  const updateUser = (updatedUser) => {
-    setUsers((prevVal) =>
-      prevVal.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+  const renderPaginationBtns = () => {
+    return (
+      <div className="pagination-control-btns">
+        <FormControl>
+          <Select
+            native
+            value={tableDisplayLimit.increasement}
+            onChange={(e) => {
+              setTableDisplayLimit((prevVal) => {
+                return {
+                  ...prevVal,
+                  increasement: parseInt(e.target.value),
+                };
+              });
+            }}
+          >
+            <option value={10}>Ten</option>
+            <option value={20}>Twenty</option>
+            <option value={50}>Fifty</option>
+            <option value={100}>Hundred</option>
+          </Select>
+        </FormControl>
+        <div className="pagination-arrows">
+          <span
+            onClick={() => handleTableBtns("prev")}
+            style={{
+              color: tableDisplayLimit.start === 0 && "grey",
+            }}
+            className="prev-arrow"
+          >
+            &lt;
+          </span>
+          <span
+            style={{
+              color: tableDisplayLimit.finish + 1 > users.length && "grey",
+            }}
+            onClick={() => handleTableBtns("next")}
+            className="next-arrow"
+          >
+            &gt;
+          </span>
+        </div>
+      </div>
     );
-    setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
   };
 
-  const addUser = (newUser) => {
-    setUsers((prevVal) => {
-      return [...prevVal, newUser];
-    });
+  const closeAlert = () =>
     setTimeout(() => setAlert({ rowId: null, show: false }), 1500);
+
+  const deleteRow = () => {
+    dispatch(deleteUser(alert.rowId));
+    closeAlert();
+  };
+
+  const handleUpdateUser = (updatedUser) => {
+    dispatch(updateUser(updatedUser));
+    closeAlert();
+  };
+
+  const addNewUser = (newUser) => {
+    dispatch(addUser(newUser));
+    closeAlert();
   };
 
   return (
     <>
       <div className="user-list-table-container active-page">
-        {users ? (
+        {!loading ? (
           <>
             <TableContainer className="table-container" component={Paper}>
               <Table className="table-container" aria-label="simple table">
@@ -87,6 +127,7 @@ const UserList = () => {
                     <TableCell align="left">Name</TableCell>
                     <TableCell align="left">Email</TableCell>
                     <TableCell align="left">content</TableCell>
+                    <TableCell align="left">{renderPaginationBtns()}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -105,7 +146,7 @@ const UserList = () => {
                           <TableCell align="left">
                             {user.body.substring(0, 50)}
                           </TableCell>
-                          <TableCell align="left">
+                          <TableCell align="right">
                             <span
                               className="delete-icon"
                               onClick={() =>
@@ -153,48 +194,7 @@ const UserList = () => {
                   +
                 </Button>
               </div>
-              <div className="pagination-control-btns">
-                <FormControl>
-                  <Select
-                    native
-                    value={tableDisplayLimit.increasement}
-                    onChange={(e) => {
-                      setTableDisplayLimit((prevVal) => {
-                        return {
-                          ...prevVal,
-                          increasement: parseInt(e.target.value),
-                        };
-                      });
-                    }}
-                  >
-                    <option value={10}>Ten</option>
-                    <option value={20}>Twenty</option>
-                    <option value={50}>Fifty</option>
-                    <option value={100}>Hundred</option>
-                  </Select>
-                </FormControl>
-                <div className="pagination-arrows">
-                  <span
-                    onClick={() => handleTableBtns("prev")}
-                    style={{
-                      color: tableDisplayLimit.start === 0 && "grey",
-                    }}
-                    className="prev-arrow"
-                  >
-                    &lt;
-                  </span>
-                  <span
-                    style={{
-                      color:
-                        tableDisplayLimit.finish + 1 > users.length && "grey",
-                    }}
-                    onClick={() => handleTableBtns("next")}
-                    className="next-arrow"
-                  >
-                    &gt;
-                  </span>
-                </div>
-              </div>
+              {renderPaginationBtns()}
             </div>
           </>
         ) : (
@@ -204,14 +204,14 @@ const UserList = () => {
       {alert.show && (
         <Alert
           user={
-            alert.mode !== "add" &&
-            users.find((user) => user.id === alert.rowId)
+            alert.mode === "edit" &&
+            users?.find((user) => user.id === alert.rowId)
           }
           alert={alert}
           setAlert={setAlert}
           deleteRow={() => deleteRow()}
-          updateUser={(updatedUser) => updateUser(updatedUser)}
-          addUser={(newUser) => addUser(newUser)}
+          updateUser={(updatedUser) => handleUpdateUser(updatedUser)}
+          addUser={(newUser) => addNewUser(newUser)}
         />
       )}
     </>
