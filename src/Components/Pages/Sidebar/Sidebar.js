@@ -7,7 +7,7 @@ const Sidebar = () => {
     {
       categoryTitle: "navigation menu",
       subElements: [
-        { name: "users", notificationCount: 0 },
+        { name: "List of users", notificationCount: 0 },
         { name: "dashboard", notificationCount: 0 },
         { name: "application", notificationCount: 2 },
       ],

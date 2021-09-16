@@ -1,0 +1,41 @@
+.credit-card-root {
+  position: relative;
+  height: 200px;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 6%), 0px 6px 10px 0px rgb(0 0 0 / 4%),
+    0px 1px 18px 0px rgb(0 0 0 / 4%);
+  overflow: hidden;
+}
+.card-circles-bg {
+  position: absolute;
+  pointer-events: none;
+  width: 100%;
+}
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #fff;
+}
+.card-icon-container,
+.card-detail-btn,
+.card-information {
+  padding: 20px 20px 10px 20px;
+}
+.card-detail-btn {
+  border-left: 1px solid #fff;
+  cursor: pointer;
+}
+.card-date {
+  color: hsla(0, 0%, 100%, 0.54);
+  font-size: 14px;
+}
+.card-user {
+  margin: 10px 0;
+  font-size: 24px;
+  font-weight: 300;
+}
+.card-balance {
+  font-weight: 900;
+  font-size: 24px;
+}

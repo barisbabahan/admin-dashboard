@@ -3,6 +3,26 @@
   height: 400px;
   margin-bottom: 100px;
 }
+.table-information-container {
+  padding-left: 20px;
+  padding-top: 20px;
+}
+.table-title {
+  color: rgba(0, 0, 0, 0.8);
+}
+.table-subtitle {
+  color: rgba(0, 0, 0, 0.7);
+  margin: 15px 0 10px;
+}
+.command-item {
+  margin-left: 30px;
+  margin-bottom: 10px;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 18px;
+}
+.command-item:last-child {
+  margin-bottom: 30px;
+}
 .table-container {
   background: #f4f5fc;
 }

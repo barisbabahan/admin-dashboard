@@ -1,13 +1,23 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import ElementIcon from "../../../images/sidebar-element.svg";
+import { changePage } from "../../../actions/activePage";
 import "./SidebarElement.css";
 
 const SidebarElement = ({ title, subElements }) => {
+  const dispatch = useDispatch();
+
   return (
     <div className="element-card-root">
       <h4 className="element-category-title">{title}</h4>
       {subElements.map((element, i) => (
-        <div key={i} className="elemnt-category-item">
+        <div
+          onClick={() =>
+            dispatch(changePage(element.name.replace(/\s/g, "").toLowerCase()))
+          }
+          key={i}
+          className="elemnt-category-item"
+        >
           <div className="left-side">
             <img className="item-icon" src={ElementIcon} alt="sidebar item" />
             <p className="category-elemet-text">{element.name}</p>

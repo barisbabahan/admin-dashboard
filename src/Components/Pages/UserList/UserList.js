@@ -14,11 +14,12 @@ import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Alert from "../../Elements/Alert/Alert";
+
 import "./UserList.css";
 
 const UserList = () => {
   const dispatch = useDispatch();
-  const { users, loading } = useSelector((state) => state);
+  const { users, loading } = useSelector((state) => state.userList);
 
   const [tableDisplayLimit, setTableDisplayLimit] = useState({
     start: 0,
@@ -31,6 +32,15 @@ const UserList = () => {
     show: false,
     mode: "",
   });
+
+  const tableFunctionalites = [
+    "You can add user by clicking +",
+    "You can edit user by clicking pen button",
+    "You can remove user by clicking trash button",
+    "You can go next page by clicking next arrow",
+    "You can go prev page by clicking prev arrow",
+    "You can go 10, 20, 50 and 100 rows at once by selecting rows increment from dropdown",
+  ];
 
   const handleTableBtns = (action) => {
     const { start, finish, increasement } = tableDisplayLimit;
@@ -117,6 +127,19 @@ const UserList = () => {
   return (
     <>
       <div className="user-list-table-container active-page">
+        <div className="table-information-container">
+          <h1 className="table-title">Welcome to list of users table</h1>
+          <h3 className="table-subtitle">
+            You have able to do fallowing functionalities:
+          </h3>
+          <ul>
+            {tableFunctionalites.map((command) => (
+              <li key={command} className="command-item">
+                {command}
+              </li>
+            ))}
+          </ul>
+        </div>
         {!loading ? (
           <>
             <TableContainer className="table-container" component={Paper}>
@@ -126,8 +149,11 @@ const UserList = () => {
                     <TableCell>ID</TableCell>
                     <TableCell align="left">Name</TableCell>
                     <TableCell align="left">Email</TableCell>
-                    <TableCell align="left">content</TableCell>
-                    <TableCell align="left">{renderPaginationBtns()}</TableCell>
+                    <TableCell align="left">Content</TableCell>
+                    <TableCell align="right">Action</TableCell>
+                    <TableCell align="right">
+                      {renderPaginationBtns()}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

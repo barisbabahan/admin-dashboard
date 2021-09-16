@@ -1,0 +1,49 @@
+.tutorial-card-root {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 6%), 0px 6px 10px 0px rgb(0 0 0 / 4%),
+    0px 1px 18px 0px rgb(0 0 0 / 4%);
+  margin-bottom: 20px;
+}
+.tutorial-card-root:last-child {
+  margin-bottom: 0;
+}
+.tutorial-informaiton-container {
+  display: flex;
+  align-items: center;
+}
+.video-information {
+  margin-left: 10px;
+}
+.video-sub-title {
+  font-size: 12px;
+  margin-bottom: 5px;
+  color: hsla(0, 0%, 100%, 0.8);
+}
+.video-code-container {
+  background: hsla(0, 0%, 100%, 0.1);
+  padding: 10px;
+  border-radius: 10px;
+}
+.video-play-button {
+  border-radius: 100% !important;
+  outline: none;
+  border: none;
+}
+.video-play-button:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+.play-button-svg {
+  color: #fff;
+  width: 50px !important;
+  height: 50px !important;
+}
+.credit-card-container {
+  width: 100%;
+}
